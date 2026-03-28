@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import SearchBar from "@/components/SearchBar";
 import FilterPanel from "@/components/FilterPanel";
 import ResultCard from "@/components/ResultCard";
+import AnswerPanel from "@/components/AnswerPanel";
 import { searchDuckDuckGo, type SearchFilter, type DateFilter, type SearchResult } from "@/lib/searchApi";
 import { useSearchHistory } from "@/hooks/useSearchHistory";
 import { Loader2 } from "lucide-react";
@@ -51,7 +52,7 @@ const Results = () => {
             {loading ? (
               <div className="flex items-center justify-center py-20">
                 <Loader2 className="w-6 h-6 animate-spin text-primary" />
-                <span className="ml-3 text-muted-foreground">Searching...</span>
+                <span className="ml-3 text-muted-foreground">Ищем результаты...</span>
               </div>
             ) : results.length === 0 ? (
               <motion.div
@@ -59,14 +60,15 @@ const Results = () => {
                 animate={{ opacity: 1 }}
                 className="text-center py-20 text-muted-foreground"
               >
-                <p className="text-lg">No results found for "{query}"</p>
-                <p className="text-sm mt-2">Try different keywords or filters</p>
+                <p className="text-lg">По запросу "{query}" ничего не найдено</p>
+                <p className="text-sm mt-2">Попробуйте изменить запрос или фильтры</p>
               </motion.div>
             ) : (
               <div className="space-y-3">
                 <p className="text-sm text-muted-foreground mb-4">
                   {results.length} results for <span className="font-medium text-foreground">"{query}"</span>
                 </p>
+                <AnswerPanel query={query} results={results} />
                 {results.map((r, i) => (
                   <ResultCard key={`${r.url}-${i}`} result={r} index={i} />
                 ))}

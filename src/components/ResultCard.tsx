@@ -1,11 +1,12 @@
 import { type SearchResult } from "@/lib/searchApi";
-import { ExternalLink, Play } from "lucide-react";
+import { ExternalLink, Play, Video } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 
 const ResultCard = ({ result, index }: { result: SearchResult; index: number }) => {
   const [showVideo, setShowVideo] = useState(false);
-  const isVideo = result.type === "videos" && result.videoUrl;
+  const isVideo = result.type === "videos";
+  const canEmbed = Boolean(result.videoUrl);
 
   return (
     <motion.div
@@ -34,15 +35,21 @@ const ResultCard = ({ result, index }: { result: SearchResult; index: number }) 
           />
         )}
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
+          <div className="flex items-center gap-2 mb-1 flex-wrap">
             <span className="text-xs text-muted-foreground truncate">{result.source}</span>
             {isVideo && (
+              <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full flex items-center gap-1">
+                <Video className="w-3 h-3" />
+                Видео
+              </span>
+            )}
+            {canEmbed && (
               <button
                 onClick={() => setShowVideo(!showVideo)}
                 className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full flex items-center gap-1 hover:bg-primary/20 transition-colors"
               >
                 <Play className="w-3 h-3" />
-                {showVideo ? "Hide" : "Play"}
+                {showVideo ? "Скрыть" : "Смотреть"}
               </button>
             )}
           </div>
