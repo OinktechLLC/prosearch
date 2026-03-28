@@ -22,29 +22,6 @@ interface RutubeApiItem {
 }
 
 const PROXY = "https://api.allorigins.win/raw?url=";
-let geoCache: boolean | null = null;
-
-const isLikelyRussianLocale = () => {
-  const lang = navigator.language || "";
-  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
-  return lang.startsWith("ru") || tz.includes("Moscow") || tz.includes("Europe/Moscow");
-};
-
-async function isRussianUserByIp(): Promise<boolean> {
-  if (geoCache !== null) return geoCache;
-
-  try {
-    const res = await fetch("https://ipapi.co/json/");
-    if (!res.ok) throw new Error(`ipapi failed: ${res.status}`);
-    const data = (await res.json()) as { country_code?: string };
-    geoCache = data.country_code?.toUpperCase() === "RU";
-    return geoCache;
-  } catch (error) {
-    console.warn("IP geolocation fallback to locale:", error);
-    geoCache = isLikelyRussianLocale();
-    return geoCache;
-  }
-}
 
 export async function searchDuckDuckGo(
   query: string,
@@ -52,10 +29,9 @@ export async function searchDuckDuckGo(
   dateFilter: DateFilter = "any"
 ): Promise<SearchResult[]> {
   try {
-    // Для видео используем отдельный пайплайн: обычные + RU-источники по IP.
+    // Для видео используем отдельный агрегатор источников в стиле Perplexity.
     if (filter === "videos") {
-      const isRu = await isRussianUserByIp();
-      return await searchVideos(query, isRu);
+      return await searchVideos(query);
     }
 
     const params = new URLSearchParams({ q: query, format: "json", no_redirect: "1" });
@@ -177,33 +153,40 @@ async function scrapeResults(
   }
 }
 
-async function searchVideos(query: string, isRu: boolean): Promise<SearchResult[]> {
-  const fallbackGlobal: SearchResult[] = [
+async function searchVideos(query: string): Promise<SearchResult[]> {
+  const results: SearchResult[] = [];
+
+  // Базовые источники (всегда доступны пользователю).
+  results.push(
     {
       title: `${query} — YouTube`,
       url: `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`,
-      snippet: `Видео по запросу «${query}» на YouTube`,
+      snippet: `Видео по запросу «${query}» на YouTube.`,
       source: "YouTube",
       type: "videos",
     },
-  ];
-
-  if (!isRu) {
-    return fallbackGlobal;
-  }
-
-  const ruResults: SearchResult[] = [];
+    {
+      title: `${query} — VK Видео`,
+      url: `https://vkvideo.ru/search?query=${encodeURIComponent(query)}`,
+      snippet: `Видео по запросу «${query}» в VK Видео.`,
+      source: "VK Видео",
+      type: "videos",
+    }
+  );
 
   try {
     const rutubeApi = `${PROXY}${encodeURIComponent(`https://rutube.ru/api/search/video/?query=${encodeURIComponent(query)}&page=1`)}`;
     const rutubeRes = await fetch(rutubeApi);
+
     if (rutubeRes.ok) {
       const rutubeData = (await rutubeRes.json()) as { results?: RutubeApiItem[] };
       const top = rutubeData.results?.slice(0, 8) || [];
-      top.forEach((item, index) => {
-        if (!item.title) return;
+
+      for (const item of top) {
+        if (!item.title) continue;
+
         const watchUrl = item.video_url || item.embed_url || `https://rutube.ru/search/?query=${encodeURIComponent(query)}`;
-        ruResults.push({
+        results.push({
           title: item.title,
           url: watchUrl,
           snippet: item.description || `Видео на RuTube по запросу «${query}».`,
@@ -213,27 +196,15 @@ async function searchVideos(query: string, isRu: boolean): Promise<SearchResult[
           videoUrl: item.embed_url,
           date: item.created_ts,
         });
-
-        // Небольшая защита от дублей пустого API
-        if (index > 12) return;
-      });
+      }
     }
   } catch (error) {
     console.warn("RuTube API unavailable:", error);
   }
 
-  // VK Видео: в большинстве случаев закрывает прямой embed без авторизации,
-  // поэтому даем пользователю релевантный поиск + карточку источника.
-  ruResults.push({
-    title: `${query} — VK Видео`,
-    url: `https://vkvideo.ru/search?query=${encodeURIComponent(query)}`,
-    snippet: `Открыть поиск «${query}» в VK Видео.`,
-    source: "VK Видео",
-    type: "videos",
-  });
-
-  if (ruResults.length === 1) {
-    ruResults.unshift({
+  const hasRutubeItem = results.some((item) => item.source === "RuTube");
+  if (!hasRutubeItem) {
+    results.push({
       title: `${query} — RuTube`,
       url: `https://rutube.ru/search/?query=${encodeURIComponent(query)}`,
       snippet: `Открыть поиск «${query}» в RuTube.`,
@@ -242,7 +213,15 @@ async function searchVideos(query: string, isRu: boolean): Promise<SearchResult[
     });
   }
 
-  return ruResults;
+  // Убираем дубли по URL, сохраняя порядок (важно для UX карточек).
+  const uniqueByUrl = new Map<string, SearchResult>();
+  for (const item of results) {
+    if (!uniqueByUrl.has(item.url)) {
+      uniqueByUrl.set(item.url, item);
+    }
+  }
+
+  return Array.from(uniqueByUrl.values());
 }
 
 function generateFallbackResults(query: string, filter: SearchFilter): SearchResult[] {
