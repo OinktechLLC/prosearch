@@ -3,10 +3,10 @@ import { motion } from "framer-motion";
 import SearchBar from "@/components/SearchBar";
 
 const suggestions = [
-  "Best AI coding assistant in 2026",
-  "Build a 7-day Japan itinerary with budget",
-  "Explain quantum entanglement simply",
-  "Top LLMs for multilingual search",
+  "Сравни GPT, Copilot и Perplexity для разработки",
+  "Сделай план поездки в Японию на 7 дней",
+  "Объясни квантовую запутанность простыми словами",
+  "Топ AI-инструментов для команд в 2026",
 ];
 
 const Home = () => {
@@ -17,23 +17,23 @@ const Home = () => {
   };
 
   return (
-    <main className="min-h-[calc(100vh-3.5rem)] bg-gradient-to-b from-background via-background to-muted/40 px-4 pb-16 pt-14 sm:pt-20">
-      <div className="mx-auto w-full max-w-4xl">
+    <main className="min-h-[calc(100vh-3.5rem)] bg-gradient-to-b from-background via-background to-muted/50 px-4 pb-16 pt-12 sm:pt-16">
+      <div className="mx-auto w-full max-w-5xl">
         <motion.div
           className="mb-10 text-center"
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35 }}
         >
-          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Answer engine</p>
-          <h1 className="text-balance text-4xl font-semibold tracking-tight sm:text-6xl">Where knowledge begins</h1>
-          <p className="mx-auto mt-3 max-w-2xl text-pretty text-sm text-muted-foreground sm:text-base">
-            Быстрый AI-поиск: крупный ввод, быстрые вопросы и ответы со ссылками на источники.
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">AI Answer Engine</p>
+          <h1 className="text-balance text-4xl font-semibold tracking-tight sm:text-6xl">Поиск и ответы в одном окне</h1>
+          <p className="mx-auto mt-3 max-w-3xl text-pretty text-sm text-muted-foreground sm:text-base">
+            Интерфейс в стиле современных AI-ассистентов: чат-подобная выдача, встроенные фото/видео и меньше лишних переходов на внешние сайты.
           </p>
         </motion.div>
 
         <motion.div
-          className="mb-5"
+          className="mb-6 rounded-3xl border border-border/60 bg-card/70 p-3 sm:p-4"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.08, duration: 0.35 }}
@@ -51,7 +51,7 @@ const Home = () => {
             <button
               key={suggestion}
               onClick={() => handleSearch(suggestion)}
-              className="rounded-2xl border border-border/80 bg-card/80 px-4 py-3 text-left text-sm text-foreground/90 transition-colors hover:border-primary/40 hover:bg-card"
+              className="rounded-2xl border border-border/80 bg-card/90 px-4 py-3 text-left text-sm text-foreground/90 transition-colors hover:border-primary/40 hover:bg-card"
             >
               {suggestion}
             </button>

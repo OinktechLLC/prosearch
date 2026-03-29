@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Search, Mic, MicOff, X, ArrowUp } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useVoiceSearch } from "@/hooks/useVoiceSearch";
@@ -13,6 +13,10 @@ interface SearchBarProps {
 
 const SearchBar = ({ onSearch, defaultValue = "", variant = "hero", autoFocus }: SearchBarProps) => {
   const [query, setQuery] = useState(defaultValue);
+
+  useEffect(() => {
+    setQuery(defaultValue);
+  }, [defaultValue]);
 
   const handleVoiceResult = useCallback(
     (text: string) => {
@@ -32,11 +36,11 @@ const SearchBar = ({ onSearch, defaultValue = "", variant = "hero", autoFocus }:
   const isHero = variant === "hero";
 
   return (
-    <form onSubmit={handleSubmit} className="mx-auto w-full max-w-3xl">
+    <form onSubmit={handleSubmit} className="mx-auto w-full max-w-4xl">
       <motion.div
         className={cn(
-          "relative flex items-center rounded-[28px] border border-border/80 bg-card/95 pr-2 shadow-[0_10px_40px_-24px_hsl(var(--foreground)/0.45)]",
-          isHero ? "min-h-[68px] pl-5" : "min-h-[58px] pl-4",
+          "relative flex items-center rounded-[30px] border border-border/70 bg-card/95 pr-2 shadow-[0_10px_40px_-24px_hsl(var(--foreground)/0.55)]",
+          isHero ? "min-h-[72px] pl-5" : "min-h-[56px] pl-4",
           isListening && "border-primary/60 ring-2 ring-primary/20"
         )}
         whileFocus={{ scale: 1.005 }}
@@ -46,7 +50,7 @@ const SearchBar = ({ onSearch, defaultValue = "", variant = "hero", autoFocus }:
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Ask anything..."
+          placeholder="Спросите что угодно"
           autoFocus={autoFocus}
           className={cn(
             "ml-3 flex-1 bg-transparent text-foreground outline-none placeholder:text-muted-foreground/90",
