@@ -25,30 +25,31 @@ const dates: { value: DateFilter; label: string }[] = [
 
 const FilterPanel = ({ searchType, dateFilter, onTypeChange, onDateChange }: FilterPanelProps) => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <div>
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Type</h3>
-        <div className="space-y-1">
+        <h3 className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">Focus</h3>
+        <div className="flex flex-wrap gap-2">
           {types.map((t) => (
             <button
               key={t.value}
               onClick={() => onTypeChange(t.value)}
               className={cn(
-                "flex items-center gap-2.5 w-full px-3 py-2 rounded-lg text-sm transition-all",
+                "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-colors",
                 searchType === t.value
-                  ? "bg-primary/10 text-primary font-medium"
-                  : "text-muted-foreground hover:bg-accent hover:text-foreground"
+                  ? "border-primary/40 bg-primary/10 text-primary"
+                  : "border-border text-muted-foreground hover:border-primary/40 hover:text-foreground"
               )}
             >
-              <t.icon className="w-4 h-4" />
+              <t.icon className="h-3.5 w-3.5" />
               {t.label}
             </button>
           ))}
         </div>
       </div>
+
       <div>
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3 flex items-center gap-1.5">
-          <Calendar className="w-3.5 h-3.5" /> Date
+        <h3 className="mb-2 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+          <Calendar className="h-3.5 w-3.5" /> Time
         </h3>
         <div className="space-y-1">
           {dates.map((d) => (
@@ -56,9 +57,9 @@ const FilterPanel = ({ searchType, dateFilter, onTypeChange, onDateChange }: Fil
               key={d.value}
               onClick={() => onDateChange(d.value)}
               className={cn(
-                "w-full text-left px-3 py-2 rounded-lg text-sm transition-all",
+                "w-full rounded-lg px-3 py-2 text-left text-sm transition-colors",
                 dateFilter === d.value
-                  ? "bg-primary/10 text-primary font-medium"
+                  ? "bg-primary/10 text-primary"
                   : "text-muted-foreground hover:bg-accent hover:text-foreground"
               )}
             >

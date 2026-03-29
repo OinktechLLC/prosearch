@@ -14,10 +14,13 @@ interface SearchBarProps {
 const SearchBar = ({ onSearch, defaultValue = "", variant = "hero", autoFocus }: SearchBarProps) => {
   const [query, setQuery] = useState(defaultValue);
 
-  const handleVoiceResult = useCallback((text: string) => {
-    setQuery(text);
-    onSearch(text);
-  }, [onSearch]);
+  const handleVoiceResult = useCallback(
+    (text: string) => {
+      setQuery(text);
+      onSearch(text);
+    },
+    [onSearch]
+  );
 
   const { isListening, startListening, stopListening, supported } = useVoiceSearch(handleVoiceResult);
 
@@ -29,28 +32,28 @@ const SearchBar = ({ onSearch, defaultValue = "", variant = "hero", autoFocus }:
   const isHero = variant === "hero";
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-3xl mx-auto">
+    <form onSubmit={handleSubmit} className="mx-auto w-full max-w-3xl">
       <motion.div
         className={cn(
-          "relative flex items-center rounded-2xl border border-border bg-card transition-all duration-300",
-          "card-shadow",
-          isHero ? "h-16 px-5" : "h-12 px-4",
-          isListening && "animate-pulse-glow border-primary"
+          "relative flex items-center rounded-[28px] border border-border/80 bg-card/95 pr-2 shadow-[0_10px_40px_-24px_hsl(var(--foreground)/0.45)]",
+          isHero ? "min-h-[68px] pl-5" : "min-h-[58px] pl-4",
+          isListening && "border-primary/60 ring-2 ring-primary/20"
         )}
-        whileFocus={{ scale: isHero ? 1.01 : 1 }}
+        whileFocus={{ scale: 1.005 }}
       >
-        <Search className={cn("shrink-0 text-muted-foreground", isHero ? "w-5 h-5" : "w-4 h-4")} />
+        <Search className={cn("shrink-0 text-muted-foreground", isHero ? "h-5 w-5" : "h-4 w-4")} />
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Спросите что угодно…"
+          placeholder="Ask anything..."
           autoFocus={autoFocus}
           className={cn(
-            "flex-1 bg-transparent border-none outline-none ml-3 text-foreground placeholder:text-muted-foreground",
+            "ml-3 flex-1 bg-transparent text-foreground outline-none placeholder:text-muted-foreground/90",
             isHero ? "text-base" : "text-sm"
           )}
         />
+
         <AnimatePresence>
           {query && (
             <motion.button
@@ -59,30 +62,33 @@ const SearchBar = ({ onSearch, defaultValue = "", variant = "hero", autoFocus }:
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
               onClick={() => setQuery("")}
-              className="p-1 mr-1 rounded-full hover:bg-accent text-muted-foreground"
+              className="mr-1 rounded-full p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
             >
-              <X className="w-4 h-4" />
+              <X className="h-4 w-4" />
             </motion.button>
           )}
         </AnimatePresence>
+
         {supported && (
           <button
             type="button"
             onClick={isListening ? stopListening : startListening}
             className={cn(
-              "p-2 rounded-full transition-colors mr-1",
-              isListening ? "text-primary bg-primary/10" : "text-muted-foreground hover:bg-accent"
+              "mr-1 rounded-full p-2 transition-colors",
+              isListening ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-accent hover:text-foreground"
             )}
+            aria-label="Голосовой поиск"
           >
-            {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+            {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
           </button>
         )}
+
         <button
           type="submit"
-          className="h-8 w-8 rounded-full bg-primary text-primary-foreground inline-flex items-center justify-center hover:opacity-90 transition-opacity"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-foreground text-background transition-transform hover:scale-[1.03]"
           aria-label="Отправить запрос"
         >
-          <ArrowUp className="w-4 h-4" />
+          <ArrowUp className="h-4 w-4" />
         </button>
       </motion.div>
     </form>
