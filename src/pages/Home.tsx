@@ -28,7 +28,7 @@ const Home = () => {
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Answer engine</p>
           <h1 className="text-balance text-4xl font-semibold tracking-tight sm:text-6xl">Where knowledge begins</h1>
           <p className="mx-auto mt-3 max-w-2xl text-pretty text-sm text-muted-foreground sm:text-base">
-            Максимально близкий интерфейс к Perplexity: крупный ввод, быстрые вопросы и ответы со ссылками на источники.
+            Быстрый AI-поиск: крупный ввод, быстрые вопросы и ответы со ссылками на источники.
           </p>
         </motion.div>
 

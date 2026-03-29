@@ -18,7 +18,7 @@ const About = () => (
         <span className="gradient-text">About Pro Search</span>
       </h1>
       <p className="text-muted-foreground text-lg mb-12">
-        A modern, privacy-focused search engine inspired by Perplexity AI and iOS Spotlight.
+        A modern, privacy-focused search engine with a clean conversational interface.
       </p>
     </motion.div>
 

@@ -17,7 +17,7 @@ const Header = () => {
           </div>
           <span className="text-sm font-semibold tracking-tight">PerSearch</span>
           <span className="rounded-full border border-border px-2 py-0.5 text-[10px] font-medium uppercase text-muted-foreground">
-            clone
+            beta
           </span>
         </Link>
 
