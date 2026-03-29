@@ -62,7 +62,7 @@ export async function searchDuckDuckGo(
   dateFilter: DateFilter = "any"
 ): Promise<SearchResult[]> {
   try {
-    // Для видео используем отдельный агрегатор источников в стиле Perplexity.
+    // Для видео используем отдельный агрегатор источников.
     if (filter === "videos") {
       return await searchVideos(query);
     }
