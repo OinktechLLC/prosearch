@@ -1,11 +1,11 @@
 import { useTheme } from "@/hooks/useTheme";
 import { Link, useLocation } from "react-router-dom";
-import { Sun, Moon, Search, Clock, Info } from "lucide-react";
+import { Sun, Moon, Search, History, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { to: "/", label: "Home", icon: Search },
-  { to: "/recent", label: "Recent", icon: Clock },
+  { to: "/", label: "Search", icon: Search },
+  { to: "/recent", label: "History", icon: History },
   { to: "/about", label: "About", icon: Info },
 ];
 
@@ -14,13 +14,13 @@ const Header = () => {
   const location = useLocation();
 
   return (
-    <header className="sticky top-0 z-50 glass-surface border-b border-border">
+    <header className="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur">
       <div className="container flex items-center justify-between h-14">
         <Link to="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-            <Search className="w-4 h-4 text-primary-foreground" />
+          <div className="w-7 h-7 rounded-md bg-primary/15 text-primary flex items-center justify-center">
+            <Search className="w-4 h-4" />
           </div>
-          <span className="font-bold text-lg gradient-text">Pro Search</span>
+          <span className="font-semibold text-base">ProSearch AI</span>
         </Link>
         <nav className="flex items-center gap-1">
           {navItems.map((item) => (
@@ -30,7 +30,7 @@ const Header = () => {
               className={cn(
                 "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-colors",
                 location.pathname === item.to
-                  ? "bg-primary/10 text-primary font-medium"
+                  ? "bg-accent text-foreground"
                   : "text-muted-foreground hover:text-foreground hover:bg-accent"
               )}
             >
@@ -40,7 +40,8 @@ const Header = () => {
           ))}
           <button
             onClick={toggle}
-            className="ml-2 p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+            className="ml-1 p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+            aria-label="Сменить тему"
           >
             {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>

@@ -32,7 +32,9 @@ const Results = () => {
       }
     });
 
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [query, searchType, dateFilter]);
 
   const handleSearch = (q: string) => {
@@ -40,19 +42,18 @@ const Results = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-3.5rem)]">
-      <div className="border-b border-border bg-card/50">
-        <div className="container py-4">
+    <main className="min-h-[calc(100vh-3.5rem)] px-4 py-6 sm:py-8">
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-6">
           <SearchBar onSearch={handleSearch} defaultValue={query} variant="compact" />
         </div>
-      </div>
-      <div className="container py-6">
-        <div className="flex gap-8">
-          <div className="flex-1 min-w-0">
+
+        <div className="grid gap-6 lg:grid-cols-[1fr_240px]">
+          <section className="min-w-0">
             {loading ? (
               <div className="flex items-center justify-center py-20">
                 <Loader2 className="w-6 h-6 animate-spin text-primary" />
-                <span className="ml-3 text-muted-foreground">Ищем результаты...</span>
+                <span className="ml-3 text-muted-foreground">Готовлю ответ и источники…</span>
               </div>
             ) : results.length === 0 ? (
               <motion.div
@@ -61,12 +62,12 @@ const Results = () => {
                 className="text-center py-20 text-muted-foreground"
               >
                 <p className="text-lg">По запросу "{query}" ничего не найдено</p>
-                <p className="text-sm mt-2">Попробуйте изменить запрос или фильтры</p>
+                <p className="text-sm mt-2">Попробуйте уточнить формулировку вопроса.</p>
               </motion.div>
             ) : (
-              <div className="space-y-3">
-                <p className="text-sm text-muted-foreground mb-4">
-                  {results.length} results for <span className="font-medium text-foreground">"{query}"</span>
+              <div className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Найдено {results.length} материалов по запросу <span className="font-medium text-foreground">"{query}"</span>
                 </p>
                 <AnswerPanel query={query} results={results} />
                 {results.map((r, i) => (
@@ -74,9 +75,10 @@ const Results = () => {
                 ))}
               </div>
             )}
-          </div>
-          <aside className="hidden lg:block w-56 shrink-0">
-            <div className="sticky top-20 glass-surface rounded-xl p-4">
+          </section>
+
+          <aside className="hidden lg:block">
+            <div className="sticky top-20 rounded-xl border border-border bg-card p-4">
               <FilterPanel
                 searchType={searchType}
                 dateFilter={dateFilter}
@@ -87,7 +89,7 @@ const Results = () => {
           </aside>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 

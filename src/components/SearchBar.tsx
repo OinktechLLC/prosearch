@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { Search, Mic, MicOff, X } from "lucide-react";
+import { Search, Mic, MicOff, X, ArrowUp } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useVoiceSearch } from "@/hooks/useVoiceSearch";
 import { cn } from "@/lib/utils";
@@ -29,26 +29,26 @@ const SearchBar = ({ onSearch, defaultValue = "", variant = "hero", autoFocus }:
   const isHero = variant === "hero";
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-2xl mx-auto">
+    <form onSubmit={handleSubmit} className="w-full max-w-3xl mx-auto">
       <motion.div
         className={cn(
-          "relative flex items-center rounded-2xl border border-border transition-all duration-300",
-          "glass-surface",
-          isHero ? "h-14 px-5 search-glow" : "h-11 px-4",
+          "relative flex items-center rounded-2xl border border-border bg-card transition-all duration-300",
+          "card-shadow",
+          isHero ? "h-16 px-5" : "h-12 px-4",
           isListening && "animate-pulse-glow border-primary"
         )}
-        whileFocus={{ scale: isHero ? 1.02 : 1 }}
+        whileFocus={{ scale: isHero ? 1.01 : 1 }}
       >
         <Search className={cn("shrink-0 text-muted-foreground", isHero ? "w-5 h-5" : "w-4 h-4")} />
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search anything..."
+          placeholder="Спросите что угодно…"
           autoFocus={autoFocus}
           className={cn(
             "flex-1 bg-transparent border-none outline-none ml-3 text-foreground placeholder:text-muted-foreground",
-            isHero ? "text-lg" : "text-sm"
+            isHero ? "text-base" : "text-sm"
           )}
         />
         <AnimatePresence>
@@ -70,13 +70,20 @@ const SearchBar = ({ onSearch, defaultValue = "", variant = "hero", autoFocus }:
             type="button"
             onClick={isListening ? stopListening : startListening}
             className={cn(
-              "p-2 rounded-full transition-colors",
+              "p-2 rounded-full transition-colors mr-1",
               isListening ? "text-primary bg-primary/10" : "text-muted-foreground hover:bg-accent"
             )}
           >
             {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
           </button>
         )}
+        <button
+          type="submit"
+          className="h-8 w-8 rounded-full bg-primary text-primary-foreground inline-flex items-center justify-center hover:opacity-90 transition-opacity"
+          aria-label="Отправить запрос"
+        >
+          <ArrowUp className="w-4 h-4" />
+        </button>
       </motion.div>
     </form>
   );
