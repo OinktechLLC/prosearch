@@ -17,7 +17,7 @@ const Home = () => {
   };
 
   return (
-    <main className="min-h-[calc(100vh-3.5rem)] bg-gradient-to-b from-background via-background to-muted/50 px-4 pb-16 pt-12 sm:pt-16">
+    <main className="min-h-[calc(100vh-3.5rem)] bg-background px-4 pb-16 pt-12 sm:pt-16">
       <div className="mx-auto w-full max-w-5xl">
         <motion.div
           className="mb-10 text-center"
@@ -25,15 +25,15 @@ const Home = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35 }}
         >
-          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">AI Answer Engine</p>
-          <h1 className="text-balance text-4xl font-semibold tracking-tight sm:text-6xl">Поиск и ответы в одном окне</h1>
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">ProSearch Beta</p>
+          <h1 className="text-balance text-4xl font-semibold tracking-tight sm:text-6xl">Интерфейс в стиле Copilot / ChatGPT / Perplexity</h1>
           <p className="mx-auto mt-3 max-w-3xl text-pretty text-sm text-muted-foreground sm:text-base">
             Интерфейс в стиле современных AI-ассистентов: чат-подобная выдача, встроенные фото/видео и меньше лишних переходов на внешние сайты.
           </p>
         </motion.div>
 
         <motion.div
-          className="mb-6 rounded-3xl border border-border/60 bg-card/70 p-3 sm:p-4"
+          className="mb-6 rounded-3xl border border-border/70 bg-card p-3 sm:p-4"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.08, duration: 0.35 }}
@@ -51,7 +51,7 @@ const Home = () => {
             <button
               key={suggestion}
               onClick={() => handleSearch(suggestion)}
-              className="rounded-2xl border border-border/80 bg-card/90 px-4 py-3 text-left text-sm text-foreground/90 transition-colors hover:border-primary/40 hover:bg-card"
+              className="rounded-2xl border border-border/80 bg-card px-4 py-3 text-left text-sm text-foreground/90 transition-colors hover:border-primary/40 hover:bg-muted/50"
             >
               {suggestion}
             </button>

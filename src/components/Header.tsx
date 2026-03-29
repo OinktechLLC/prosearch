@@ -15,9 +15,9 @@ const Header = () => {
           <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-foreground text-background">
             <Search className="h-4 w-4" />
           </div>
-          <span className="text-sm font-semibold tracking-tight">PerSearch AI</span>
+          <span className="text-sm font-semibold tracking-tight">ProSearch AI</span>
           <span className="rounded-full border border-border px-2 py-0.5 text-[10px] font-medium uppercase text-muted-foreground">
-            preview
+            beta
           </span>
         </Link>
 

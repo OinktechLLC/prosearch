@@ -44,13 +44,13 @@ const Results = () => {
   const sourceList = results.slice(0, 8);
 
   return (
-    <main className="min-h-[calc(100vh-3.5rem)] bg-gradient-to-b from-background via-background to-muted/40 px-4 pb-12 pt-6 sm:pt-8">
+    <main className="min-h-[calc(100vh-3.5rem)] bg-background px-4 pb-12 pt-6 sm:pt-8">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-4 rounded-3xl border border-border/60 bg-card/70 p-3 sm:p-4">
+        <div className="mb-4 rounded-3xl border border-border/70 bg-card p-3 sm:p-4">
           <SearchBar onSearch={handleSearch} defaultValue={query} variant="compact" />
         </div>
 
-        <div className="grid gap-5 lg:grid-cols-[260px_minmax(0,1fr)_280px]">
+        <div className="grid gap-5 lg:grid-cols-[240px_minmax(0,1fr)_260px]">
           <aside className="space-y-4 lg:sticky lg:top-20 lg:h-fit">
             <div className="rounded-3xl border border-border/70 bg-card/95 p-4">
               <h3 className="mb-3 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
