@@ -6,7 +6,7 @@ import ResultCard from "@/components/ResultCard";
 import AnswerPanel from "@/components/AnswerPanel";
 import { searchDuckDuckGo, type SearchFilter, type DateFilter, type SearchResult } from "@/lib/searchApi";
 import { useSearchHistory } from "@/hooks/useSearchHistory";
-import { Loader2 } from "lucide-react";
+import { Loader2, Quote } from "lucide-react";
 import { motion } from "framer-motion";
 
 const Results = () => {
@@ -41,50 +41,70 @@ const Results = () => {
     navigate(`/results?q=${encodeURIComponent(q)}`);
   };
 
+  const sourceList = results.slice(0, 8);
+
   return (
-    <main className="min-h-[calc(100vh-3.5rem)] px-4 py-6 sm:py-8">
+    <main className="min-h-[calc(100vh-3.5rem)] bg-gradient-to-b from-background via-background to-muted/30 px-4 pb-12 pt-6 sm:pt-8">
       <div className="mx-auto max-w-6xl">
-        <div className="mb-6">
+        <div className="mb-5">
           <SearchBar onSearch={handleSearch} defaultValue={query} variant="compact" />
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-[1fr_240px]">
-          <section className="min-w-0">
+        <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_280px]">
+          <section className="min-w-0 space-y-4">
             {loading ? (
-              <div className="flex items-center justify-center py-20">
-                <Loader2 className="w-6 h-6 animate-spin text-primary" />
-                <span className="ml-3 text-muted-foreground">Готовлю ответ и источники…</span>
+              <div className="flex items-center justify-center py-24">
+                <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                <span className="ml-3 text-muted-foreground">Synthesizing answer...</span>
               </div>
             ) : results.length === 0 ? (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-center py-20 text-muted-foreground"
-              >
-                <p className="text-lg">По запросу "{query}" ничего не найдено</p>
-                <p className="text-sm mt-2">Попробуйте уточнить формулировку вопроса.</p>
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="py-20 text-center text-muted-foreground">
+                <p className="text-lg">No results for “{query}”.</p>
+                <p className="mt-2 text-sm">Try adding context or changing the search focus.</p>
               </motion.div>
             ) : (
-              <div className="space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  Найдено {results.length} материалов по запросу <span className="font-medium text-foreground">"{query}"</span>
-                </p>
+              <>
+                <div className="rounded-2xl border border-border/70 bg-card/70 px-4 py-2.5 text-sm text-muted-foreground">
+                  Showing <span className="font-semibold text-foreground">{results.length}</span> sources for “{query}”.
+                </div>
                 <AnswerPanel query={query} results={results} />
                 {results.map((r, i) => (
                   <ResultCard key={`${r.url}-${i}`} result={r} index={i} />
                 ))}
-              </div>
+              </>
             )}
           </section>
 
-          <aside className="hidden lg:block">
-            <div className="sticky top-20 rounded-xl border border-border bg-card p-4">
+          <aside className="space-y-4 lg:sticky lg:top-20 lg:h-fit">
+            <div className="rounded-2xl border border-border/80 bg-card/95 p-4">
               <FilterPanel
                 searchType={searchType}
                 dateFilter={dateFilter}
                 onTypeChange={setSearchType}
                 onDateChange={setDateFilter}
               />
+            </div>
+
+            <div className="rounded-2xl border border-border/80 bg-card/95 p-4">
+              <h3 className="mb-3 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+                <Quote className="h-3.5 w-3.5" /> Sources
+              </h3>
+              <ul className="space-y-2">
+                {sourceList.map((item, idx) => (
+                  <li key={`${item.url}-${idx}`}>
+                    <a
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="line-clamp-2 text-sm text-foreground/90 transition-colors hover:text-primary"
+                    >
+                      [{idx + 1}] {item.title}
+                    </a>
+                    <p className="truncate text-xs text-muted-foreground">{item.source}</p>
+                  </li>
+                ))}
+                {sourceList.length === 0 && <li className="text-sm text-muted-foreground">Sources will appear here.</li>}
+              </ul>
             </div>
           </aside>
         </div>
