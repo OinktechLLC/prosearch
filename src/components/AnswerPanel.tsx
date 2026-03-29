@@ -1,5 +1,5 @@
 import { type SearchResult } from "@/lib/searchApi";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Link2 } from "lucide-react";
 
 interface AnswerPanelProps {
   query: string;
@@ -16,26 +16,26 @@ const AnswerPanel = ({ query, results }: AnswerPanelProps) => {
   const isVideoMode = results[0]?.type === "videos";
 
   return (
-    <section className="rounded-xl border border-primary/20 bg-primary/5 p-4 mb-5">
+    <section className="rounded-2xl border border-border bg-card p-5">
       <div className="flex items-center gap-2 mb-3">
         <Sparkles className="w-4 h-4 text-primary" />
-        <h2 className="text-sm font-semibold">{isVideoMode ? "AI Video Brief" : "AI Answer"}</h2>
+        <h2 className="text-sm font-semibold">{isVideoMode ? "AI Video Summary" : "AI Summary"}</h2>
       </div>
 
       <p className="text-sm leading-6 text-foreground/90">
         {isVideoMode ? (
           <>
-            По запросу <span className="font-medium">«{query}»</span> собраны видео из нескольких источников.
-            Используйте карточки ниже, чтобы открыть поиск и посмотреть ролики на RuTube, VK Видео и других площадках.
+            По запросу <span className="font-medium">«{query}»</span> найдено несколько релевантных видео.
+            Ниже вы можете открыть материалы по источникам и сравнить точки зрения.
           </>
         ) : (
           <>
-            По запросу <span className="font-medium">«{query}»</span> чаще всего встречаются следующие факты:
+            Короткий вывод по запросу <span className="font-medium">«{query}»</span>: 
             {topResults.map((r, idx) => (
               <span key={`${r.url}-${idx}`}>
-                {" "}
-                {idx + 1}) {r.snippet.replace(/\s+/g, " ").slice(0, 160)}
-                {r.snippet.length > 160 ? "…" : ""}
+                {idx === 0 ? " " : " "}
+                {r.snippet.replace(/\s+/g, " ").slice(0, 150)}
+                {r.snippet.length > 150 ? "…" : ""}
                 {` [${idx + 1}]`}
                 {idx === topResults.length - 1 ? "." : ";"}
               </span>
@@ -44,16 +44,17 @@ const AnswerPanel = ({ query, results }: AnswerPanelProps) => {
         )}
       </p>
 
-      <div className="mt-3 text-xs text-muted-foreground">
+      <div className="mt-4 flex flex-wrap gap-2">
         {topResults.map((r, idx) => (
           <a
             key={`${r.source}-${idx}`}
             href={r.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="block hover:text-foreground transition-colors"
+            className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors"
           >
-            [{idx + 1}] {r.source} — {r.title}
+            <Link2 className="w-3 h-3" />
+            [{idx + 1}] {r.source}
           </a>
         ))}
       </div>
