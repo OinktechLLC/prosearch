@@ -23,6 +23,39 @@ interface RutubeApiItem {
 
 const PROXY = "https://api.allorigins.win/raw?url=";
 
+function toVideoEmbedUrl(url: string): string | undefined {
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.replace("www.", "");
+
+    if (host === "youtube.com" || host === "m.youtube.com") {
+      const id = parsed.searchParams.get("v");
+      return id ? `https://www.youtube.com/embed/${id}` : undefined;
+    }
+
+    if (host === "youtu.be") {
+      const id = parsed.pathname.split("/").filter(Boolean)[0];
+      return id ? `https://www.youtube.com/embed/${id}` : undefined;
+    }
+
+    if (host === "rutube.ru") {
+      const match = parsed.pathname.match(/\/video\/([a-zA-Z0-9]+)/);
+      if (match?.[1]) {
+        return `https://rutube.ru/play/embed/${match[1]}`;
+      }
+    }
+
+    if (host === "vimeo.com") {
+      const id = parsed.pathname.split("/").filter(Boolean)[0];
+      return id ? `https://player.vimeo.com/video/${id}` : undefined;
+    }
+  } catch {
+    return undefined;
+  }
+
+  return undefined;
+}
+
 export async function searchDuckDuckGo(
   query: string,
   filter: SearchFilter = "web",
@@ -156,23 +189,16 @@ async function scrapeResults(
 async function searchVideos(query: string): Promise<SearchResult[]> {
   const results: SearchResult[] = [];
 
-  // Базовые источники (всегда доступны пользователю).
-  results.push(
-    {
-      title: `${query} — YouTube`,
-      url: `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`,
-      snippet: `Видео по запросу «${query}» на YouTube.`,
-      source: "YouTube",
+  // Сначала пробуем получить реальную видео-выдачу DuckDuckGo, как в классических поисковиках.
+  const ddgVideoResults = await scrapeResults(query, "videos", "any");
+  for (const item of ddgVideoResults.slice(0, 12)) {
+    results.push({
+      ...item,
+      source: item.source || "DuckDuckGo Videos",
       type: "videos",
-    },
-    {
-      title: `${query} — VK Видео`,
-      url: `https://vkvideo.ru/search?query=${encodeURIComponent(query)}`,
-      snippet: `Видео по запросу «${query}» в VK Видео.`,
-      source: "VK Видео",
-      type: "videos",
-    }
-  );
+      videoUrl: toVideoEmbedUrl(item.url),
+    });
+  }
 
   try {
     const rutubeApi = `${PROXY}${encodeURIComponent(`https://rutube.ru/api/search/video/?query=${encodeURIComponent(query)}&page=1`)}`;
@@ -212,6 +238,24 @@ async function searchVideos(query: string): Promise<SearchResult[]> {
       type: "videos",
     });
   }
+
+  // Базовые источники как надёжный fallback, если прямых карточек мало.
+  results.push(
+    {
+      title: `${query} — YouTube`,
+      url: `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`,
+      snippet: `Видео по запросу «${query}» на YouTube.`,
+      source: "YouTube",
+      type: "videos",
+    },
+    {
+      title: `${query} — VK Видео`,
+      url: `https://vkvideo.ru/search?query=${encodeURIComponent(query)}`,
+      snippet: `Видео по запросу «${query}» в VK Видео.`,
+      source: "VK Видео",
+      type: "videos",
+    }
+  );
 
   // Убираем дубли по URL, сохраняя порядок (важно для UX карточек).
   const uniqueByUrl = new Map<string, SearchResult>();

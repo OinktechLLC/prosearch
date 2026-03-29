@@ -1,10 +1,11 @@
 import { type SearchResult } from "@/lib/searchApi";
 import { ExternalLink, Play, Video } from "lucide-react";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 const ResultCard = ({ result, index }: { result: SearchResult; index: number }) => {
-  const [showVideo, setShowVideo] = useState(false);
+  const shouldAutoShowVideo = useMemo(() => result.type === "videos" && index < 2 && Boolean(result.videoUrl), [result.type, result.videoUrl, index]);
+  const [showVideo, setShowVideo] = useState(shouldAutoShowVideo);
   const isVideo = result.type === "videos";
   const canEmbed = Boolean(result.videoUrl);
 
