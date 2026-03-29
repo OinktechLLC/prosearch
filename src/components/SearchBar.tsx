@@ -40,7 +40,7 @@ const SearchBar = ({ onSearch, defaultValue = "", variant = "hero", autoFocus }:
       <motion.div
         className={cn(
           "relative flex items-center rounded-[30px] border border-border/70 bg-card/95 pr-2 shadow-[0_10px_40px_-24px_hsl(var(--foreground)/0.55)]",
-          isHero ? "min-h-[72px] pl-5" : "min-h-[56px] pl-4",
+          isHero ? "min-h-[62px] pl-4 sm:min-h-[72px] sm:pl-5" : "min-h-[52px] pl-3 sm:min-h-[56px] sm:pl-4",
           isListening && "border-primary/60 ring-2 ring-primary/20"
         )}
         whileFocus={{ scale: 1.005 }}
@@ -54,7 +54,7 @@ const SearchBar = ({ onSearch, defaultValue = "", variant = "hero", autoFocus }:
           autoFocus={autoFocus}
           className={cn(
             "ml-3 flex-1 bg-transparent text-foreground outline-none placeholder:text-muted-foreground/90",
-            isHero ? "text-base" : "text-sm"
+            isHero ? "text-sm sm:text-base" : "text-sm"
           )}
         />
 

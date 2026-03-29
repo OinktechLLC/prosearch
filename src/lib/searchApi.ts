@@ -23,6 +23,16 @@ interface RutubeApiItem {
 
 const PROXY = "https://api.allorigins.win/raw?url=";
 
+export function buildJinaMirrorUrl(url: string): string {
+  try {
+    const parsed = new URL(url);
+    const protocol = parsed.protocol === "http:" ? "http://" : "https://";
+    return `https://r.jina.ai/${protocol}${parsed.host}${parsed.pathname}${parsed.search}${parsed.hash}`;
+  } catch {
+    return `https://r.jina.ai/http://${url.replace(/^https?:\/\//, "")}`;
+  }
+}
+
 function toVideoEmbedUrl(url: string): string | undefined {
   try {
     const parsed = new URL(url);

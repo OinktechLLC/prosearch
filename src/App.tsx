@@ -10,6 +10,7 @@ import Results from "./pages/Results";
 import RecentSearches from "./pages/RecentSearches";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
+import Article from "./pages/Article";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/results" element={<Results />} />
             <Route path="/recent" element={<RecentSearches />} />
             <Route path="/about" element={<About />} />
+            <Route path="/article" element={<Article />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
