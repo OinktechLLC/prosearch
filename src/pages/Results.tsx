@@ -51,7 +51,7 @@ const Results = () => {
         </div>
 
         <div className="grid gap-5 lg:grid-cols-[240px_minmax(0,1fr)_260px]">
-          <aside className="space-y-4 lg:sticky lg:top-20 lg:h-fit">
+          <aside className="order-2 space-y-4 lg:order-1 lg:sticky lg:top-20 lg:h-fit">
             <div className="rounded-3xl border border-border/70 bg-card/95 p-4">
               <h3 className="mb-3 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
                 <Compass className="h-3.5 w-3.5" /> Режим поиска
@@ -65,7 +65,7 @@ const Results = () => {
             </div>
           </aside>
 
-          <section className="min-w-0 space-y-4">
+          <section className="order-1 min-w-0 space-y-4 lg:order-2">
             {loading ? (
               <div className="flex items-center justify-center py-24">
                 <Loader2 className="h-6 w-6 animate-spin text-primary" />
@@ -97,7 +97,7 @@ const Results = () => {
             )}
           </section>
 
-          <aside className="space-y-4 lg:sticky lg:top-20 lg:h-fit">
+          <aside className="order-3 hidden space-y-4 lg:sticky lg:top-20 lg:block lg:h-fit">
             <div className="rounded-3xl border border-border/70 bg-card/95 p-4">
               <h3 className="mb-3 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
                 <Quote className="h-3.5 w-3.5" /> Источники

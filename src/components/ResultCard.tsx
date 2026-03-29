@@ -1,28 +1,18 @@
 import { type SearchResult } from "@/lib/searchApi";
 import { ExternalLink, Play, Video, Eye, Image as ImageIcon } from "lucide-react";
 import { motion } from "framer-motion";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { Link } from "react-router-dom";
+import WebPreview from "./WebPreview";
 
 const ResultCard = ({ result, index }: { result: SearchResult; index: number }) => {
-  const shouldAutoShowVideo = useMemo(
-    () => result.type === "videos" && index < 2 && Boolean(result.videoUrl),
-    [result.type, result.videoUrl, index]
-  );
-
-  const [showEmbedded, setShowEmbedded] = useState(shouldAutoShowVideo || result.type === "images");
+  const [showEmbedded, setShowEmbedded] = useState((result.type === "videos" && index < 2 && Boolean(result.videoUrl)) || result.type === "images");
   const isVideo = result.type === "videos";
   const isImage = result.type === "images";
-  const previewUrl = result.videoUrl || result.thumbnail || result.url;
   const canEmbedVideo = isVideo && Boolean(result.videoUrl);
   const canEmbedImage = isImage && Boolean(result.thumbnail);
   const canEmbedWebFrame = !isVideo && !isImage;
-  const webMirrorUrl = useMemo(() => {
-    if (!canEmbedWebFrame) return "";
-    const withoutProtocol = result.url.replace(/^https?:\/\//, "");
-    return `https://r.jina.ai/http://${withoutProtocol}`;
-  }, [canEmbedWebFrame, result.url]);
-  const embeddedUrl = canEmbedWebFrame ? webMirrorUrl : previewUrl;
 
   return (
     <motion.article
@@ -51,20 +41,7 @@ const ResultCard = ({ result, index }: { result: SearchResult; index: number }) 
         </div>
       )}
 
-      {showEmbedded && canEmbedWebFrame && (
-        <div className="mb-3 overflow-hidden rounded-2xl border border-border/70 bg-muted/20">
-          <iframe
-            src={embeddedUrl}
-            title={`preview-${result.title}`}
-            className="h-72 w-full"
-            loading="lazy"
-            referrerPolicy="no-referrer"
-          />
-          <div className="border-t border-border/70 bg-background/80 px-3 py-2 text-[11px] text-muted-foreground">
-            Показано во встроенном режиме (beta mirror), чтобы страница открывалась внутри ProSearch.
-          </div>
-        </div>
-      )}
+      {showEmbedded && canEmbedWebFrame && <WebPreview url={result.url} title={result.title} />}
 
       <div className="mb-2 flex flex-wrap items-center gap-2 text-xs">
         <span className="truncate text-muted-foreground">{result.source}</span>
@@ -108,6 +85,15 @@ const ResultCard = ({ result, index }: { result: SearchResult; index: number }) 
           <ExternalLink className="h-3 w-3" />
           Оригинал
         </a>
+
+        {canEmbedWebFrame && (
+          <Link
+            to={`/article?url=${encodeURIComponent(result.url)}&title=${encodeURIComponent(result.title)}`}
+            className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-primary/35 hover:text-foreground"
+          >
+            Читать статью
+          </Link>
+        )}
       </div>
     </motion.article>
   );

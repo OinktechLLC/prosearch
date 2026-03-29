@@ -10,12 +10,12 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur-xl">
-      <div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between px-4 sm:px-6">
+      <div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between gap-2 px-3 sm:px-6">
         <Link to="/" className="group inline-flex items-center gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-foreground text-background">
             <Search className="h-4 w-4" />
           </div>
-          <span className="text-sm font-semibold tracking-tight">ProSearch AI</span>
+          <span className="text-sm font-semibold tracking-tight max-[360px]:hidden">ProSearch AI</span>
           <span className="rounded-full border border-border px-2 py-0.5 text-[10px] font-medium uppercase text-muted-foreground">
             beta
           </span>
@@ -26,7 +26,7 @@ const Header = () => {
             <Link
               to="/"
               className={cn(
-                "inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors",
+                "inline-flex items-center gap-1.5 rounded-full border border-border px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors sm:px-3",
                 "hover:border-primary/40 hover:text-foreground"
               )}
             >

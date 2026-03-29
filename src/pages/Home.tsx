@@ -17,18 +17,18 @@ const Home = () => {
   };
 
   return (
-    <main className="min-h-[calc(100vh-3.5rem)] bg-background px-4 pb-16 pt-12 sm:pt-16">
-      <div className="mx-auto w-full max-w-5xl">
+    <main className="min-h-[calc(100vh-3.5rem)] bg-background px-4 pb-16 pt-10 sm:pt-16">
+      <div className="mx-auto w-full max-w-4xl">
         <motion.div
-          className="mb-10 text-center"
+          className="mb-8 text-center sm:mb-10"
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35 }}
         >
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">ProSearch Beta</p>
-          <h1 className="text-balance text-4xl font-semibold tracking-tight sm:text-6xl">Интерфейс в стиле Copilot / ChatGPT / Perplexity</h1>
-          <p className="mx-auto mt-3 max-w-3xl text-pretty text-sm text-muted-foreground sm:text-base">
-            Интерфейс в стиле современных AI-ассистентов: чат-подобная выдача, встроенные фото/видео и меньше лишних переходов на внешние сайты.
+          <h1 className="text-balance text-3xl font-semibold tracking-tight sm:text-5xl">Что хотите узнать?</h1>
+          <p className="mx-auto mt-3 max-w-2xl text-pretty text-sm text-muted-foreground sm:text-base">
+            Минималистичный интерфейс в стиле AI-ассистентов: быстрый поиск, встроенный просмотр и статья внутри ProSearch.
           </p>
         </motion.div>
 
