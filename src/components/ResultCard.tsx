@@ -17,6 +17,12 @@ const ResultCard = ({ result, index }: { result: SearchResult; index: number }) 
   const canEmbedVideo = isVideo && Boolean(result.videoUrl);
   const canEmbedImage = isImage && Boolean(result.thumbnail);
   const canEmbedWebFrame = !isVideo && !isImage;
+  const webMirrorUrl = useMemo(() => {
+    if (!canEmbedWebFrame) return "";
+    const withoutProtocol = result.url.replace(/^https?:\/\//, "");
+    return `https://r.jina.ai/http://${withoutProtocol}`;
+  }, [canEmbedWebFrame, result.url]);
+  const embeddedUrl = canEmbedWebFrame ? webMirrorUrl : previewUrl;
 
   return (
     <motion.article
@@ -48,12 +54,15 @@ const ResultCard = ({ result, index }: { result: SearchResult; index: number }) 
       {showEmbedded && canEmbedWebFrame && (
         <div className="mb-3 overflow-hidden rounded-2xl border border-border/70 bg-muted/20">
           <iframe
-            src={previewUrl}
+            src={embeddedUrl}
             title={`preview-${result.title}`}
-            className="h-64 w-full"
+            className="h-72 w-full"
             loading="lazy"
             referrerPolicy="no-referrer"
           />
+          <div className="border-t border-border/70 bg-background/80 px-3 py-2 text-[11px] text-muted-foreground">
+            Показано во встроенном режиме (beta mirror), чтобы страница открывалась внутри ProSearch.
+          </div>
         </div>
       )}
 
@@ -87,7 +96,7 @@ const ResultCard = ({ result, index }: { result: SearchResult; index: number }) 
           )}
         >
           {isVideo ? <Play className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
-          {showEmbedded ? "Скрыть в сайте" : "Смотреть в сайте"}
+          {showEmbedded ? "Скрыть в ProSearch" : "Смотреть в ProSearch"}
         </button>
 
         <a
