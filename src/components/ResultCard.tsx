@@ -43,8 +43,8 @@ const ResultCard = ({ result, index }: { result: SearchResult; index: number }) 
 
       {showEmbedded && canEmbedWebFrame && <WebPreview url={result.url} title={result.title} />}
 
-      <div className="mb-2 flex flex-wrap items-center gap-2 text-xs">
-        <span className="truncate text-muted-foreground">{result.source}</span>
+      <div className="mb-2 flex min-w-0 flex-wrap items-center gap-2 text-xs">
+        <span className="max-w-full truncate text-muted-foreground">{result.source}</span>
         {isVideo && (
           <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-primary">
             <Video className="h-3 w-3" />
@@ -59,14 +59,14 @@ const ResultCard = ({ result, index }: { result: SearchResult; index: number }) 
         )}
       </div>
 
-      <h3 className="text-base font-medium text-foreground">{result.title}</h3>
-      <p className="mt-1 line-clamp-3 text-sm leading-6 text-muted-foreground">{result.snippet}</p>
+      <h3 className="break-words text-base font-medium text-foreground">{result.title}</h3>
+      <p className="mt-1 line-clamp-3 break-words text-sm leading-6 text-muted-foreground">{result.snippet}</p>
 
       <div className="mt-3 flex flex-wrap gap-2">
         <button
           onClick={() => setShowEmbedded((prev) => !prev)}
           className={cn(
-            "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-colors",
+            "inline-flex max-w-full items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-colors",
             showEmbedded
               ? "border-primary/45 bg-primary/10 text-primary"
               : "border-border text-muted-foreground hover:border-primary/35 hover:text-foreground"
@@ -80,7 +80,7 @@ const ResultCard = ({ result, index }: { result: SearchResult; index: number }) 
           href={result.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-primary/35 hover:text-foreground"
+          className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-primary/35 hover:text-foreground"
         >
           <ExternalLink className="h-3 w-3" />
           Оригинал
@@ -89,9 +89,9 @@ const ResultCard = ({ result, index }: { result: SearchResult; index: number }) 
         {canEmbedWebFrame && (
           <Link
             to={`/article?url=${encodeURIComponent(result.url)}&title=${encodeURIComponent(result.title)}`}
-            className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-primary/35 hover:text-foreground"
+            className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-primary/35 hover:text-foreground"
           >
-            Читать статью
+            Открыть в ProSearch
           </Link>
         )}
       </div>

@@ -20,7 +20,7 @@ const AnswerPanel = ({ query, results }: AnswerPanelProps) => {
         <h2 className="text-sm font-semibold">Answer</h2>
       </div>
 
-      <p className="text-sm leading-7 text-foreground/95 sm:text-[15px]">
+      <p className="break-words text-sm leading-7 text-foreground/95 sm:text-[15px]">
         По запросу <span className="font-semibold">“{query}”</span> собраны релевантные источники. Коротко: 
         {topResults.map((r, idx) => (
           <span key={`${r.url}-${idx}`}>
@@ -40,10 +40,10 @@ const AnswerPanel = ({ query, results }: AnswerPanelProps) => {
             href={r.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
+            className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
           >
             <Link2 className="h-3 w-3" />
-            [{idx + 1}] {r.source}
+            <span className="truncate">[{idx + 1}] {r.source}</span>
           </a>
         ))}
       </div>

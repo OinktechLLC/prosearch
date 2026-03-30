@@ -105,7 +105,7 @@ const Results = () => {
               <ul className="space-y-2">
                 {sourceList.map((item, idx) => (
                   <li key={`${item.url}-${idx}`}>
-                    <p className="line-clamp-2 text-sm text-foreground/90">
+                    <p className="line-clamp-2 break-words text-sm text-foreground/90">
                       [{idx + 1}] {item.title}
                     </p>
                     <p className="truncate text-xs text-muted-foreground">{item.source}</p>
