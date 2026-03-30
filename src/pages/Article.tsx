@@ -1,7 +1,7 @@
 import { useMemo, useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { buildJinaMirrorUrl } from "@/lib/searchApi";
-import { ArrowLeft, ExternalLink, Loader2 } from "lucide-react";
+import { ArrowLeft, ExternalLink, Loader2, Globe, FileText } from "lucide-react";
 
 const Article = () => {
   const [params] = useSearchParams();
@@ -12,6 +12,7 @@ const Article = () => {
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(Boolean(url));
   const [error, setError] = useState(false);
+  const [viewMode, setViewMode] = useState<"embedded" | "text">("embedded");
 
   useEffect(() => {
     if (!url) return;
@@ -64,19 +65,63 @@ const Article = () => {
           )}
         </div>
 
+        <div className="mb-4 flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => setViewMode("embedded")}
+            className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-colors ${
+              viewMode === "embedded"
+                ? "border-primary/45 bg-primary/10 text-primary"
+                : "border-border text-muted-foreground hover:border-primary/40 hover:text-foreground"
+            }`}
+          >
+            <Globe className="h-3.5 w-3.5" /> Встроенный сайт
+          </button>
+          <button
+            type="button"
+            onClick={() => setViewMode("text")}
+            className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-colors ${
+              viewMode === "text"
+                ? "border-primary/45 bg-primary/10 text-primary"
+                : "border-border text-muted-foreground hover:border-primary/40 hover:text-foreground"
+            }`}
+          >
+            <FileText className="h-3.5 w-3.5" /> Текстовая версия
+          </button>
+        </div>
+
         <h1 className="mb-4 text-balance text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h1>
 
-        {loading && (
+        {viewMode === "embedded" && url && (
+          <div className="mb-4 overflow-hidden rounded-2xl border border-border/70 bg-muted/20">
+            <iframe
+              src={url}
+              title={title}
+              className="h-[65vh] min-h-[420px] w-full"
+              loading="lazy"
+              referrerPolicy="strict-origin-when-cross-origin"
+              sandbox="allow-forms allow-popups allow-same-origin allow-scripts"
+            />
+          </div>
+        )}
+
+        {viewMode === "embedded" && (
+          <p className="mb-4 text-xs text-muted-foreground">
+            Если сайт не открывается внутри (X-Frame-Options/CSP), используйте кнопку «Оригинал» или переключитесь на текстовую версию.
+          </p>
+        )}
+
+        {viewMode === "text" && loading && (
           <div className="flex items-center gap-2 py-8 text-muted-foreground">
             <Loader2 className="h-5 w-5 animate-spin" /> Загружаю статью…
           </div>
         )}
 
-        {!loading && error && (
+        {viewMode === "text" && !loading && error && (
           <p className="text-sm text-muted-foreground">Не удалось загрузить текст. Откройте оригинальную страницу.</p>
         )}
 
-        {!loading && !error && (
+        {viewMode === "text" && !loading && !error && (
           <div className="prose prose-neutral dark:prose-invert max-w-none text-sm leading-7 sm:text-base whitespace-pre-wrap">
             {content || "Контент не найден."}
           </div>

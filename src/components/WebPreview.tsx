@@ -61,7 +61,7 @@ const WebPreview = ({ url, title }: WebPreviewProps) => {
       )}
 
       {!loading && !error && (
-        <p className="line-clamp-6 whitespace-pre-wrap text-sm leading-6 text-foreground/90">
+        <p className="line-clamp-6 whitespace-pre-wrap break-words text-sm leading-6 text-foreground/90">
           {text.slice(0, 900) || "Пустой ответ от источника."}
         </p>
       )}
